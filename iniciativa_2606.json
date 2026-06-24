@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "id_iniciativa": 2606,
+    "instrumento": "VEDP",
+    "estado": "Finalizado",
+    "analista_asignado": "Jose Azócar Berrios"
+  },
+  "datos_deterministicos": {
+    "titulo": "Optimización de Procesos de Datos para Analistas VcM UTEM",
+    "facultad": "Facultad de Ingeniería",
+    "departamento": "Departamento de Informática y Computación",
+    "carrera": "Ingeniería Civil en Ciencia de Datos",
+    "fecha_inicio": "2025-08-12",
+    "fecha_termino": "2025-11-07",
+    "socio_comunitario": "Dirección de Vinculación con el Medio (VCM) UTEM",
+    "total_asistentes": 45
+  },
+  "datos_para_slots_generativos": {
+    "contexto_formulario": "Los analistas de VcM redactan a mano los informes de gestión. Con ~300 iniciativas al año, esto consume semanas de trabajo operativo al cierre de cada semestre, generando formatos inconsistentes y duplicación de contenido que ya existe en el sistema.",
+    "evidencias_registradas": "Se adjunta el archivo EVIDENCIA VEDP 2606.pdf que contiene la lista de asistencia firmada, fotografías del taller presencial realizado en el auditorio M1 de la FING y capturas de pantalla de la plataforma Next.js ejecutándose localmente."
+  }
+}
