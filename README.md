@@ -27,18 +27,20 @@ Descartamos el uso de Fine-Tuning/PEFT debido a la inexistencia de un dataset ma
 
 ## 3. Arquitectura del Pipeline Técnico
 
-El flujo de procesamiento diseñado para el proyecto se compone de 5 etapas:
-SISAV2 JSON ──> Ingesta/Validación (Pydantic v2) ──> Mapping Determinístico (python-docx)
-│
-┌───────────────┴───────────────┐
-▼                               ▼
-Slots Fijos (Sin LLM)         Slots Narrativos (LLM + Few-Shot)
-│
-▼
-Validación RAGAS (Faithfulness >= 0.75)
-│
-▼
-Interfaz de Revisión (Streamlit)
+
+El flujo de procesamiento diseñado para el proyecto está automatizado mediante el siguiente pipeline de componentes:
+
+```
+graph TD
+    A[SISAV2 JSON] --> B[Ingesta/Validación <br> Pydantic v2]
+    B --> C{Mapping Determinístico <br> python-docx}
+    C -->|Campos Fijos <br> Sin LLM| D[Slots Directos: <br> IDs, Carreras, Asistencia]
+    C -->|Campos Narrativos <br> LLM + Few-Shot| E[Slots Generativos: <br> Resumen, Lecciones]
+    E --> F[Validación RAGAS <br> Faithfulness >= 0.75]
+    D --> G[Interfaz de Revisión <br> Streamlit]
+    F --> G
+    G --> H[.docx Final Editable]
+```
 
 1. **Ingesta y Validación Estricta:** Entrada de datos transaccionales validados mediante esquemas de **Pydantic v2** para mitigar fallas por campos corruptos o vacíos provenientes de SISAV2.
 2. **Mapping Determinístico:** Transferencia directa mediante código Python de variables duras cuantitativas (IDs, nombres de asignaturas, facultades, carreras y totales de asistencia). El LLM tiene estrictamente prohibido alterar o procesar números para salvaguardar los KPIs institucionales.
