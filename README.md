@@ -27,26 +27,14 @@ Descartamos el uso de Fine-Tuning/PEFT debido a la inexistencia de un dataset ma
 
 ## 3. Arquitectura del Pipeline Técnico
 
+El flujo de procesamiento diseñado para el proyecto está automatizado mediante los siguientes componentes interconectados:
 
-El flujo de procesamiento diseñado para el proyecto está automatizado mediante el siguiente pipeline de componentes:
-
-```
-graph TD
-    A[SISAV2 JSON] --> B[Ingesta/Validación <br> Pydantic v2]
-    B --> C{Mapping Determinístico <br> python-docx}
-    C -->|Campos Fijos <br> Sin LLM| D[Slots Directos: <br> IDs, Carreras, Asistencia]
-    C -->|Campos Narrativos <br> LLM + Few-Shot| E[Slots Generativos: <br> Resumen, Lecciones]
-    E --> F[Validación RAGAS <br> Faithfulness >= 0.75]
-    D --> G[Interfaz de Revisión <br> Streamlit]
-    F --> G
-    G --> H[.docx Final Editable]
-```
-
-1. **Ingesta y Validación Estricta:** Entrada de datos transaccionales validados mediante esquemas de **Pydantic v2** para mitigar fallas por campos corruptos o vacíos provenientes de SISAV2.
-2. **Mapping Determinístico:** Transferencia directa mediante código Python de variables duras cuantitativas (IDs, nombres de asignaturas, facultades, carreras y totales de asistencia). El LLM tiene estrictamente prohibido alterar o procesar números para salvaguardar los KPIs institucionales.
-3. **Generación con LLM Controlado:** Procesamiento mediante prompts estructurados de las áreas de texto libre (resúmenes, conclusiones y lecciones aprendidas).
-4. **Control de Calidad (RAGAS Framework):** Evaluación automatizada post-generación de la fidelidad (*Faithfulness*) del texto del LLM contra el JSON de entrada, utilizando un umbral crítico de **0.75**.
-5. **Override Humano (UI Streamlit):** Interfaz web que presenta el estado del borrador, calcula las métricas y permite la edición manual antes de la descarga en formato editable `.docx`.
+* **1. Ingesta desde SISAV2:** Recepción del JSON estructurado de la iniciativa (vía MCP o clone).
+* **2. Filtro y Validación (Pydantic v2):** Cortafuegos que verifica tipos de datos y restringe la longitud mínima de los campos de texto.
+* **3. Mapping Determinístico (python-docx):** Transferencia directa por código de datos duros (IDs, carreras, total real de asistencia). El LLM no procesa números para evitar alucinaciones.
+* **4. Generación Controlada (LLM + Few-Shot):** Procesamiento semántico con Claude o Gemini enfocado exclusivamente en slots narrativos (resumen ejecutivo y conclusiones), usando los buenos ejemplos como referencia de estilo.
+* **5. Evaluación de Calidad (RAGAS Framework):** Validación automatizada de fidelidad (Faithfulness >= 0.75) analizando el output del modelo contra el JSON original.
+* **6. Interfaz de Revisión (Streamlit):** Pantalla interactiva que permite al analista inspeccionar las métricas, editar los textos y descargar el archivo .docx final editable.
 
 ---
 
